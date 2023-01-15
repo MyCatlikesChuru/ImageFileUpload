@@ -29,13 +29,14 @@ public class AwsS3Service implements ImageUploadService {
 	public String StoreImage(MultipartFile file) {
 		validateFileExists(file);
 		String originalFilename = file.getOriginalFilename();
-		log.info("# originalFilename = {}", originalFilename);
 		String storeFileName = createStoreFileName(originalFilename);
+
+		log.info("# originalFilename = {}", originalFilename);
 		log.info("# storeFileName = {}", originalFilename);
 
-		ObjectMetadata objectMetadata = new ObjectMetadata();
-		objectMetadata.setContentType(file.getContentType());
-		log.info("getContentType = {}",file.getContentType());
+		// ObjectMetadata objectMetadata = new ObjectMetadata();
+		// objectMetadata.setContentType(file.getContentType());
+		// log.info("getContentType = {}",file.getContentType());
 
 		try (InputStream inputStream = file.getInputStream()) {
 			// byte[] bytes = IOUtils.toByteArray(inputStream);

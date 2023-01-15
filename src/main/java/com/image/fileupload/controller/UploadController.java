@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/upload")
+@RequestMapping("/upload")
 public class UploadController {
     private final ImageUploadService awsS3Service;
 
@@ -20,11 +20,9 @@ public class UploadController {
         this.awsS3Service = awsS3Service;
     }
 
-    @PostMapping("/upload")
-    public String saveImage(@RequestParam MultipartFile file, HttpServletRequest request){
+    @PostMapping
+    public String saveImage(@RequestParam MultipartFile file){
 
-        log.info("request = {}", request);
-//        log.info("itemName = {}", itemName);
         log.info("multipartFile = {}", file);
         String url = awsS3Service.StoreImage(file);
         log.info("url = {}",url);
