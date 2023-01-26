@@ -1,5 +1,6 @@
 package com.image.fileupload.controller;
 
+import com.image.fileupload.service.AwsS3Path;
 import com.image.fileupload.service.AwsS3Service;
 import com.image.fileupload.service.ImageUploadService;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +21,26 @@ public class UploadController {
         this.awsS3Service = awsS3Service;
     }
 
-    @PostMapping
-    public String saveImage(@RequestParam MultipartFile file){
+    /*
+     * AWS 엔드포인트 폴더에 저장
+     * */
+    @PostMapping("/main")
+    public String saveImageMain(@RequestParam MultipartFile file){
 
         log.info("multipartFile = {}", file);
-        String url = awsS3Service.StoreImage(file);
+        String url = awsS3Service.StoreImage(file, AwsS3Path.MAIN);
+        log.info("url = {}",url);
+        return url;
+    }
+
+    /*
+    * AWS 엔드포인트내 articles 폴더에 저장
+    * */
+    @PostMapping("/articles")
+    public String saveImageArticles(@RequestParam MultipartFile file){
+
+        log.info("multipartFile = {}", file);
+        String url = awsS3Service.StoreImage(file, AwsS3Path.ARTICLES);
         log.info("url = {}",url);
         return url;
     }

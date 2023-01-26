@@ -26,7 +26,7 @@ public class AwsS3Service implements ImageUploadService {
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucketName;
 
-	public String StoreImage(MultipartFile file) {
+	public String StoreImage(MultipartFile file, AwsS3Path awsS3Path) {
 		validateFileExists(file);
 		String originalFilename = file.getOriginalFilename();
 		String storeFileName = createStoreFileName(originalFilename);
@@ -42,13 +42,14 @@ public class AwsS3Service implements ImageUploadService {
 			// byte[] bytes = IOUtils.toByteArray(inputStream);
 			// objectMetadata.setContentLength(bytes.length);
 			// ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
-			amazonS3.putObject(new PutObjectRequest(bucketName, storeFileName, inputStream, null)
+			amazonS3.putObject(new PutObjectRequest(bucketName + awsS3Path.getPath(),
+					storeFileName, inputStream, null)
 				.withCannedAcl(CannedAccessControlList.PublicRead));
 		} catch (IOException e) {
 			throw new RuntimeException();
 		}
 
-		return amazonS3.getUrl(bucketName, storeFileName).toString();
+		return amazonS3.getUrl(bucketName + awsS3Path.getPath(), storeFileName).toString();
 	}
 
 	private void validateFileExists(MultipartFile multipartFile) {
